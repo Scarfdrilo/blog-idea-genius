@@ -686,6 +686,21 @@ export default function Home() {
           story = `Antes: ${a0}. Me sentía ${a1}. Un día, decidí cambiar. Encontré ${a3.split('.')[0]}. Ahora: ${a2.split('.')[0]}.`;
           conclusion = 'Si yo pude, tú puedes.';
           cta = a4;
+        } else {
+          // Fallback Copywriting
+          hook = `${a0}. Este es tu momento.`;
+          title = `Cómo lograr ${a0}`;
+          subtitle = 'Una guía paso a paso';
+          thesis = a1 || 'El cambio empieza aquí.';
+          sections = [
+            { title: '🎯 El problema', points: [a0] },
+            { title: '💡 La solución', points: a1.split('.').filter(Boolean).slice(0, 2) },
+            { title: '✨ El resultado', points: a2.split('.').filter(Boolean).slice(0, 2) },
+            { title: '🚀 La acción', points: [a3, a4].filter(Boolean) }
+          ];
+          story = `Esto es lo que aprendí sobre ${a0}.`;
+          conclusion = 'El momento de actuar es ahora.';
+          cta = a3 || '¿Listo para empezar?';
         }
         break;
 
@@ -749,6 +764,21 @@ export default function Home() {
           story = a2;
           conclusion = 'Cada día que no eliges el camino de luz, eliges el oscuro por defecto.';
           cta = '¿Qué primer paso vas a dar HOY?';
+        } else {
+          // Fallback Storytelling
+          hook = `Déjame contarte una historia sobre ${a0}...`;
+          title = `La historia de ${a0}`;
+          subtitle = 'Una lección que no olvidarás';
+          thesis = 'Las mejores lecciones vienen envueltas en historias.';
+          sections = [
+            { title: '📖 El inicio', points: [a0] },
+            { title: '🔥 El conflicto', points: [a1, a2].filter(Boolean) },
+            { title: '💡 El momento clave', points: [a3] },
+            { title: '🎬 El desenlace', points: [a4] }
+          ];
+          story = `${a0}. ${a1}. ${a2}. ${a3}. ${a4}.`;
+          conclusion = 'Y esa es la lección.';
+          cta = '¿Cuál es TU historia?';
         }
         break;
 
@@ -783,6 +813,22 @@ export default function Home() {
           story = a3;
           conclusion = 'Los posts virales no son accidente. Son estructura + emoción + timing.';
           cta = a4;
+        } else {
+          // Fallback Híbrido
+          hook = a0 || 'Esto va a cambiar tu perspectiva...';
+          title = `${method.name}: Aplicado a ${a0}`;
+          subtitle = 'Combinando lo mejor de varias técnicas';
+          thesis = a1 || 'Una combinación poderosa.';
+          sections = [
+            { title: '🎯 Paso 1', points: [a0] },
+            { title: '🔥 Paso 2', points: [a1] },
+            { title: '💡 Paso 3', points: [a2] },
+            { title: '🚀 Paso 4', points: [a3] },
+            { title: '✅ Paso 5', points: [a4] }
+          ];
+          story = 'Cada paso construye sobre el anterior.';
+          conclusion = a4 || 'Aplica esto y ve los resultados.';
+          cta = '¿Funcionó? Cuéntame en los comentarios.';
         }
         break;
 
@@ -842,7 +888,39 @@ export default function Home() {
           story = `Cuando aprendí ${a0}, también pensé que era complicado. Hasta que encontré esta forma de verlo.`;
           conclusion = `Ahora puedes explicar ${a0} en una cena y sonar inteligente.`;
           cta = '¿Qué otro concepto "complicado" quieres que simplifique?';
+        } else {
+          // Fallback genérico para cualquier metodología
+          hook = `Esto es lo que nadie te dice sobre ${a0}...`;
+          title = `${a0}: La guía que necesitabas`;
+          subtitle = `Usando ${method.name} para entender mejor`;
+          thesis = a3 || a2 || 'Una nueva perspectiva que cambiará cómo piensas.';
+          sections = [
+            { title: '🎯 El punto de partida', points: [a0] },
+            { title: '🔍 Lo que descubrí', points: a1.split('.').filter(Boolean).slice(0, 3) },
+            { title: '💡 El insight clave', points: a2.split('.').filter(Boolean).slice(0, 3) },
+            { title: '🚀 La aplicación', points: a3.split('.').filter(Boolean).slice(0, 3) },
+            { title: '✅ Conclusiones', points: a4.split('.').filter(Boolean).slice(0, 3) }
+          ];
+          story = `Esto cambió mi forma de ver ${a0}. Y creo que puede cambiar la tuya también.`;
+          conclusion = a4 || 'Aplica esto hoy y ve qué pasa.';
+          cta = '¿Qué piensas? Déjalo en los comentarios.';
         }
+    }
+
+    // Si no se generó nada, usar fallback
+    if (!hook) {
+      hook = `Esto es lo que nadie te dice sobre ${a0}...`;
+      title = `${a0}: Una nueva perspectiva`;
+      subtitle = `Usando la metodología ${method.name}`;
+      thesis = a3 || a2 || 'Una forma diferente de ver las cosas.';
+      sections = [
+        { title: '📌 Punto 1', points: [a0, a1].filter(Boolean) },
+        { title: '📌 Punto 2', points: [a2, a3].filter(Boolean) },
+        { title: '📌 Punto 3', points: [a4].filter(Boolean) }
+      ];
+      story = `Mi experiencia con ${a0} me enseñó esto.`;
+      conclusion = 'Espero que esto te ayude.';
+      cta = '¿Qué agregarías tú?';
     }
 
     // Generar hilo de Twitter
