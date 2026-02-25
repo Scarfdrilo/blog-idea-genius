@@ -2,986 +2,851 @@
 
 import { useState, useEffect } from 'react';
 
-// Metodologías de genios con preguntas de reflexión
+// Metodologías simplificadas pero más profundas
 const methodologies = [
   {
     id: 'first-principles',
-    emoji: '🌟',
+    emoji: '🔬',
     name: 'First Principles',
-    tag: 'Recomendada',
-    authors: 'Aristóteles / Elon Musk',
-    users: ['Elon Musk', 'Jeff Bezos', 'Charlie Munger'],
-    description: 'Descompón todo hasta sus verdades fundamentales y reconstruye desde cero.',
-    howToUse: 'Identifica las suposiciones básicas de tu tema y cuestiona cada una.',
-    questions: [
-      '¿Cuáles son las verdades absolutas sobre este tema que NADIE cuestiona?',
-      '¿Qué suposiciones estoy haciendo sin darme cuenta?',
-      '¿Si empezara desde cero, cómo lo haría diferente?',
-      '¿Qué "reglas" del tema son realmente solo convenciones?',
-      '¿Cuál es la física/ciencia/matemática fundamental detrás de esto?'
-    ],
-    template: (topic: string) => [
-      `¿Cuáles son las verdades fundamentales sobre ${topic} que nadie cuestiona?`,
-      `Desmintiendo los 5 mitos más grandes sobre ${topic}`,
-      `${topic} desde cero: reconstruyendo lo que creíamos saber`,
-      `Las suposiciones falsas que te impiden dominar ${topic}`,
-      `Primeros principios de ${topic}: lo que realmente importa`
+    genius: 'Elon Musk',
+    oneLiner: 'Destruye las suposiciones. Reconstruye desde la verdad.',
+    steps: [
+      {
+        title: 'Identifica el problema',
+        question: '¿Cuál es el problema o tema que quieres explorar?',
+        placeholder: 'Ej: La gente no sabe invertir su dinero...',
+        hint: 'Sé específico. No "finanzas", sino el problema real.'
+      },
+      {
+        title: 'Lista las suposiciones',
+        question: '¿Qué cree TODO EL MUNDO sobre este tema? (aunque sea falso)',
+        placeholder: 'Ej: "Necesitas mucho dinero para invertir", "Es muy complicado", "Solo los ricos pueden"...',
+        hint: 'Escribe todo lo que la gente asume sin cuestionar.'
+      },
+      {
+        title: 'Cuestiona cada una',
+        question: '¿Cuál de esas suposiciones es FALSA o exagerada?',
+        placeholder: 'Ej: "Necesitas mucho dinero" es falso porque puedes empezar con $100...',
+        hint: 'Aquí está el oro. Las suposiciones falsas son tu contenido.'
+      },
+      {
+        title: 'La verdad fundamental',
+        question: '¿Cuál es la VERDAD que la mayoría ignora?',
+        placeholder: 'Ej: La verdad es que cualquiera puede invertir desde su celular con $100 y sin saber de economía...',
+        hint: 'Esta es tu tesis principal. El corazón de tu artículo.'
+      },
+      {
+        title: 'Reconstruye',
+        question: '¿Cómo explicarías esto desde cero a alguien que no sabe nada?',
+        placeholder: 'Ej: Paso 1: Descarga esta app. Paso 2: Conecta tu cuenta. Paso 3: Elige un fondo...',
+        hint: 'Aquí construyes la solución basada en la verdad, no en mitos.'
+      }
     ]
   },
   {
-    id: 'inverse-thinking',
+    id: 'inverse',
     emoji: '🔄',
-    name: 'Pensamiento Inverso',
-    tag: 'Genio',
-    authors: 'Carl Jacobi / Charlie Munger',
-    users: ['Charlie Munger', 'Warren Buffett', 'Naval Ravikant'],
-    description: 'Piensa en TODAS las formas de fracasar y evítalas.',
-    howToUse: 'Lista todo lo que podrías hacer MAL y luego invierte cada punto.',
-    questions: [
-      '¿Cómo podría GARANTIZAR el fracaso en este tema?',
-      '¿Cuáles son los errores más comunes que comete la gente?',
-      '¿Qué haría si quisiera arruinar esto completamente?',
-      '¿Qué es lo OPUESTO al consejo convencional?',
-      '¿Qué debería EVITAR a toda costa?'
-    ],
-    template: (topic: string) => [
-      `10 errores fatales en ${topic} (y cómo evitarlos)`,
-      `Cómo garantizar tu FRACASO en ${topic}`,
-      `Lo que NUNCA debes hacer si quieres dominar ${topic}`,
-      `Anti-guía de ${topic}: el camino seguro al desastre`,
-      `Invierte tu estrategia de ${topic}: lo que los expertos hacen diferente`
-    ]
-  },
-  {
-    id: 'second-order',
-    emoji: '♟️',
-    name: 'Pensamiento de Segundo Orden',
-    tag: 'Genio',
-    authors: 'Howard Marks',
-    users: ['Howard Marks', 'Ray Dalio', 'George Soros'],
-    description: 'Piensa en las consecuencias DE las consecuencias.',
-    howToUse: 'Para cada acción, pregunta "¿y luego qué?" al menos 3 veces.',
-    questions: [
-      '¿Y luego qué pasará? (pregunta 3 veces seguidas)',
-      '¿Cuáles son las consecuencias de las consecuencias?',
-      '¿Qué efectos secundarios podría tener esto?',
-      '¿Cómo reaccionarán los demás a mi acción?',
-      '¿Qué pasará en 10 días, 10 meses, 10 años?'
-    ],
-    template: (topic: string) => [
-      `Las consecuencias ocultas de ${topic} que nadie menciona`,
-      `${topic}: 3 movimientos adelante - lo que viene después`,
-      `El efecto dominó de ${topic} en tu vida`,
-      `Más allá de lo obvio: el segundo orden de ${topic}`,
-      `¿Qué pasa DESPUÉS de dominar ${topic}?`
-    ]
-  },
-  {
-    id: 'regret-minimization',
-    emoji: '👴',
-    name: 'Minimización del Arrepentimiento',
-    tag: 'Genio',
-    authors: 'Jeff Bezos',
-    users: ['Jeff Bezos', 'Tim Ferriss', 'Derek Sivers'],
-    description: 'Proyéctate a los 80 años. ¿De qué te arrepentirías?',
-    howToUse: 'Imagina tu yo futuro mirando hacia atrás.',
-    questions: [
-      '¿De qué me arrepentiré a los 80 años si NO hago esto?',
-      '¿Qué le diría mi yo del futuro a mi yo actual?',
-      '¿Esto importará en 5 años? ¿En 20?',
-      '¿Estoy evitando algo por miedo que luego lamentaré?',
-      '¿Qué decisión me hará sentir orgulloso cuando mire atrás?'
-    ],
-    template: (topic: string) => [
-      `A los 80 años te arrepentirás de no haber empezado ${topic}`,
-      `${topic}: la decisión que tu yo futuro agradecerá`,
-      `No esperes más para ${topic}: carta a mi yo del pasado`,
-      `El costo de la inacción en ${topic}`,
-      `Por qué empecé ${topic} tarde (y tú no deberías)`,
-    ]
-  },
-  {
-    id: 'moonshot',
-    emoji: '🌙',
-    name: '10x Moonshot Thinking',
-    tag: 'Genio',
-    authors: 'Google X / Astro Teller',
-    users: ['Larry Page', 'Elon Musk', 'Peter Thiel'],
-    description: 'No mejores 10%, mejora 10X.',
-    howToUse: 'Piensa en soluciones radicalmente diferentes, no incrementales.',
-    questions: [
-      '¿Cómo sería esto si fuera 10 VECES mejor, no 10% mejor?',
-      '¿Qué haría si tuviera recursos ilimitados?',
-      '¿Cuál es la versión más ambiciosa posible de esta idea?',
-      '¿Qué tecnología futura haría esto trivial?',
-      '¿Por qué NO pensar en grande?'
-    ],
-    template: (topic: string) => [
-      `Cómo ser 10X mejor en ${topic} (no 10% mejor)`,
-      `El moonshot de ${topic}: pensando en grande`,
-      `${topic} revolucionario: más allá de las mejoras incrementales`,
-      `La versión 10X de tu ${topic}`,
-      `Abandona el 10%: estrategia moonshot para ${topic}`
-    ]
-  },
-  {
-    id: 'steel-man',
-    emoji: '🛡️',
-    name: 'Steel Man',
-    tag: 'Genio',
-    authors: 'Filosofía Analítica',
-    users: ['Sam Harris', 'Jordan Peterson', 'Naval Ravikant'],
-    description: 'Construye la MEJOR versión del argumento contrario.',
-    howToUse: 'Defiende la posición opuesta con toda tu fuerza.',
-    questions: [
-      '¿Cuál es el MEJOR argumento en contra de mi posición?',
-      '¿Qué diría la persona más inteligente que no está de acuerdo?',
-      '¿En qué tienen razón mis críticos?',
-      '¿Puedo defender la posición contraria honestamente?',
-      '¿Qué evidencia me haría cambiar de opinión?'
-    ],
-    template: (topic: string) => [
-      `El mejor argumento CONTRA ${topic} (y mi respuesta)`,
-      `Defendiendo lo indefendible: el caso a favor del anti-${topic}`,
-      `Steel man: por qué los críticos de ${topic} tienen razón (parcialmente)`,
-      `Los puntos válidos de quienes odian ${topic}`,
-      `Debate honesto: ambos lados de ${topic}`
-    ]
-  },
-  {
-    id: 'pre-mortem',
-    emoji: '⚰️',
-    name: 'Pre-Mortem',
-    tag: 'Genio',
-    authors: 'Gary Klein',
-    users: ['Daniel Kahneman', 'Annie Duke', 'Tim Ferriss'],
-    description: 'Imagina que el proyecto ya FRACASÓ. ¿Por qué?',
-    howToUse: 'Asume el fracaso y trabaja hacia atrás.',
-    questions: [
-      'Si esto fracasa, ¿cuál sería la razón más probable?',
-      '¿Qué podría salir mal que no estoy considerando?',
-      '¿Cuáles son los puntos débiles de mi plan?',
-      '¿Qué señales de advertencia debería vigilar?',
-      '¿Qué haría diferente si supiera que va a fracasar?'
-    ],
-    template: (topic: string) => [
-      `Por qué tu proyecto de ${topic} fracasará (y cómo evitarlo)`,
-      `Pre-mortem de ${topic}: anticipando el desastre`,
-      `Los 7 asesinos silenciosos de ${topic}`,
-      `Autopsia anticipada: salvando tu ${topic} antes de empezar`,
-      `Red flags en ${topic} que debes detectar ahora`
-    ]
-  },
-  {
-    id: 'via-negativa',
-    emoji: '✂️',
-    name: 'Vía Negativa',
-    tag: 'Genio',
-    authors: 'Nassim Taleb',
-    users: ['Nassim Taleb', 'Naval Ravikant', 'Tim Ferriss'],
-    description: 'MENOS es más. Quita en lugar de agregar.',
-    howToUse: 'Identifica qué eliminar para mejorar.',
-    questions: [
-      '¿Qué puedo ELIMINAR para mejorar esto?',
-      '¿Qué estoy haciendo que debería dejar de hacer?',
-      '¿Qué complejidad innecesaria puedo quitar?',
-      '¿Qué "soluciones" están causando nuevos problemas?',
-      '¿Cuál es lo mínimo necesario para que funcione?'
-    ],
-    template: (topic: string) => [
-      `Qué ELIMINAR de tu ${topic} para mejorarlo`,
-      `Minimalismo en ${topic}: el poder de quitar`,
-      `Las 10 cosas que debes DEJAR de hacer en ${topic}`,
-      `${topic} por sustracción: menos es más`,
-      `Simplifica tu ${topic}: eliminando lo innecesario`
+    name: 'Inversión',
+    genius: 'Charlie Munger',
+    oneLiner: 'Quieres éxito? Primero, asegura el fracaso. Luego evítalo.',
+    steps: [
+      {
+        title: 'Define tu objetivo',
+        question: '¿Qué quieres lograr o enseñar?',
+        placeholder: 'Ej: Quiero enseñar a la gente a ser productiva...',
+        hint: 'El resultado positivo que buscas.'
+      },
+      {
+        title: 'Invierte: Garantiza el fracaso',
+        question: 'Si quisieras GARANTIZAR que alguien FRACASE en esto, ¿qué le dirías que haga?',
+        placeholder: 'Ej: Revisa tu celular cada 5 minutos, no duermas, di sí a todo, no planifiques nada...',
+        hint: 'Sé creativo. Piensa en todos los errores posibles.'
+      },
+      {
+        title: 'Los errores más comunes',
+        question: '¿Cuáles de estos errores comete la gente CONSTANTEMENTE?',
+        placeholder: 'Ej: El 90% revisa el celular cada 5 minutos. El 80% no duerme suficiente...',
+        hint: 'Estos son los villanos de tu artículo.'
+      },
+      {
+        title: 'La inversión',
+        question: 'Ahora invierte cada error. ¿Cuál es el comportamiento OPUESTO?',
+        placeholder: 'Ej: En vez de revisar el celular → bloquearlo por 2 horas. En vez de no dormir → 8 horas sagradas...',
+        hint: 'Cada inversión es un consejo accionable.'
+      },
+      {
+        title: 'El anti-consejo',
+        question: '¿Cuál sería el título más provocador usando el ángulo negativo?',
+        placeholder: 'Ej: "Cómo garantizar que nunca logres nada: guía completa" o "10 formas de destruir tu productividad"',
+        hint: 'Los títulos negativos generan más clicks. Es psicología.'
+      }
     ]
   },
   {
     id: 'feynman',
-    emoji: '👨‍🏫',
+    emoji: '👶',
     name: 'Técnica Feynman',
-    tag: 'Recomendada',
-    authors: 'Richard Feynman',
-    users: ['Richard Feynman', 'Bill Gates', 'Tim Urban'],
-    description: 'Si no puedes explicarlo simple, no lo entiendes.',
-    howToUse: 'Explica el concepto como si fuera para un niño de 5 años.',
-    questions: [
-      '¿Cómo le explicaría esto a un niño de 5 años?',
-      '¿Puedo explicarlo sin usar jerga técnica?',
-      '¿Cuál es la analogía más simple para esto?',
-      '¿Dónde me trabo al explicarlo? (ahí no lo entiendo bien)',
-      '¿Cuál es la esencia de este concepto en una oración?'
-    ],
-    template: (topic: string) => [
-      `${topic} explicado para un niño de 5 años`,
-      `Guía ultra-simple de ${topic} (sin jerga)`,
-      `${topic} en palabras que tu abuela entendería`,
-      `La explicación más simple de ${topic} que encontrarás`,
-      `Enseñando ${topic}: lo que aprendí al explicarlo`
+    genius: 'Richard Feynman',
+    oneLiner: 'Si no lo puedes explicar a un niño, no lo entiendes.',
+    steps: [
+      {
+        title: 'El concepto complejo',
+        question: '¿Qué concepto "complicado" quieres explicar?',
+        placeholder: 'Ej: Blockchain, inversión en bolsa, inteligencia artificial, SEO...',
+        hint: 'Algo que la gente piensa que es difícil.'
+      },
+      {
+        title: 'Explícalo como a un niño de 8 años',
+        question: 'Sin jerga técnica, ¿cómo explicarías esto a un niño curioso?',
+        placeholder: 'Ej: Blockchain es como un cuaderno mágico donde todos pueden escribir, pero nadie puede borrar...',
+        hint: 'Usa analogías del mundo real. Nada de palabras técnicas.'
+      },
+      {
+        title: '¿Dónde te trabas?',
+        question: '¿En qué parte de la explicación te confundes o no sabes cómo continuar?',
+        placeholder: 'Ej: No sé cómo explicar por qué es seguro sin hablar de criptografía...',
+        hint: 'Los puntos donde te trabas = lo que no entiendes bien. Investiga eso.'
+      },
+      {
+        title: 'La analogía perfecta',
+        question: '¿Con qué cosa cotidiana podrías comparar este concepto?',
+        placeholder: 'Ej: Es como WhatsApp pero para dinero. Es como un libro de recetas pero para código...',
+        hint: 'Las mejores explicaciones conectan lo nuevo con lo familiar.'
+      },
+      {
+        title: 'La explicación final',
+        question: 'Ahora escribe la explicación completa en 3 oraciones simples:',
+        placeholder: 'Ej: 1) Bitcoin es dinero digital. 2) Funciona sin bancos porque todos verifican las transacciones. 3) Es seguro porque no puedes cambiar el historial.',
+        hint: 'Si puedes decirlo en 3 oraciones, lo entiendes de verdad.'
+      }
     ]
   },
   {
-    id: 'antifragile',
-    emoji: '🦾',
-    name: 'Antifragile Thinking',
-    tag: 'Genio',
-    authors: 'Nassim Nicholas Taleb',
-    users: ['Nassim Taleb', 'Ray Dalio', 'Elon Musk'],
-    description: 'No solo resistas el caos — CRECE con él.',
-    howToUse: 'Diseña sistemas que se beneficien del estrés.',
-    questions: [
-      '¿Cómo puede esto MEJORAR con el estrés y el caos?',
-      '¿Qué gano cuando las cosas salen mal?',
-      '¿Estoy diseñando para ser robusto o antifrágil?',
-      '¿Cómo puedo beneficiarme de la volatilidad?',
-      '¿Qué me haría MÁS fuerte si me atacaran?'
-    ],
-    template: (topic: string) => [
-      `Cómo hacer tu ${topic} antifrágil`,
-      `${topic} que mejora con el caos`,
-      `Convierte el estrés en combustible para tu ${topic}`,
-      `El ${topic} indestructible: más allá de la resiliencia`,
-      `Abrazando la volatilidad en ${topic}`
+    id: 'premortem',
+    emoji: '💀',
+    name: 'Pre-Mortem',
+    genius: 'Daniel Kahneman',
+    oneLiner: 'El proyecto ya fracasó. Ahora descubre por qué.',
+    steps: [
+      {
+        title: 'El proyecto/idea',
+        question: '¿Qué proyecto, idea o decisión quieres analizar?',
+        placeholder: 'Ej: Lanzar mi curso online, empezar un negocio, cambiar de carrera...',
+        hint: 'Algo que estás por hacer o que otros hacen.'
+      },
+      {
+        title: 'Viaja al futuro: FRACASÓ',
+        question: 'Imagina que estamos en 1 año y FRACASÓ completamente. ¿Por qué falló?',
+        placeholder: 'Ej: No validé la idea antes, me quedé sin dinero, no tenía audiencia, el producto era malo...',
+        hint: 'Sé brutalmente honesto. ¿Qué podría salir mal?'
+      },
+      {
+        title: 'Las señales de advertencia',
+        question: '¿Qué señales tempranas indicarían que va hacia el fracaso?',
+        placeholder: 'Ej: Si en el primer mes no tengo 100 seguidores, si nadie responde mis emails, si no puedo explicar el valor...',
+        hint: 'Estas son las métricas que debes vigilar.'
+      },
+      {
+        title: 'El plan de prevención',
+        question: '¿Qué harías DIFERENTE para evitar cada punto de fracaso?',
+        placeholder: 'Ej: Validar con 10 personas antes de crear. Tener 6 meses de ahorro. Construir audiencia primero...',
+        hint: 'Cada prevención es un consejo de oro para tu artículo.'
+      },
+      {
+        title: 'El checklist anti-fracaso',
+        question: 'Convierte todo en un checklist: "Antes de X, asegúrate de Y"',
+        placeholder: 'Ej: Antes de lanzar, asegúrate de tener 10 personas que pagarían. Antes de renunciar, asegúrate de tener 6 meses...',
+        hint: 'Los checklists son contenido de altísimo valor.'
+      }
     ]
   },
   {
-    id: 'occam',
-    emoji: '🪒',
-    name: "Occam's Razor",
-    tag: 'Genio',
-    authors: 'William of Ockham',
-    users: ['William of Ockham', 'Albert Einstein', 'Steve Jobs'],
-    description: 'La explicación más simple suele ser la correcta.',
-    howToUse: 'Elimina toda complejidad innecesaria.',
-    questions: [
-      '¿Cuál es la explicación más simple posible?',
-      '¿Estoy sobre-complicando esto?',
-      '¿Qué suposiciones puedo eliminar?',
-      '¿Cuál es la solución obvia que estoy ignorando?',
-      '¿Por qué esto necesita ser tan complicado?'
-    ],
-    template: (topic: string) => [
-      `La verdad simple sobre ${topic} que complicamos`,
-      `${topic} sin complicaciones: la navaja de Occam`,
-      `Cortando la grasa: ${topic} en su forma más pura`,
-      `Por qué ${topic} es más simple de lo que crees`,
-      `La solución obvia a ${topic} que ignoramos`
+    id: 'secondorder',
+    emoji: '♟️',
+    name: 'Segundo Orden',
+    genius: 'Howard Marks',
+    oneLiner: '¿Y luego qué? ¿Y luego qué? ¿Y luego qué?',
+    steps: [
+      {
+        title: 'La decisión/acción',
+        question: '¿Qué decisión, tendencia o acción quieres analizar?',
+        placeholder: 'Ej: Trabajar remoto, usar IA para todo, invertir en crypto...',
+        hint: 'Algo que la gente hace o está considerando.'
+      },
+      {
+        title: 'Consecuencia obvia (1er orden)',
+        question: '¿Cuál es el resultado OBVIO e inmediato?',
+        placeholder: 'Ej: Trabajar remoto = más flexibilidad, no hay tráfico, trabajas en pijama...',
+        hint: 'Lo que todo el mundo ve y menciona.'
+      },
+      {
+        title: 'Y luego qué? (2do orden)',
+        question: '¿Qué pasa DESPUÉS de esa consecuencia? ¿Qué efectos secundarios tiene?',
+        placeholder: 'Ej: Más flexibilidad → trabajas más horas porque no hay límites → te quemas...',
+        hint: 'Aquí empiezan las sorpresas.'
+      },
+      {
+        title: 'Y luego qué? (3er orden)',
+        question: '¿Y qué pasa después de ESO? Sigue la cadena...',
+        placeholder: 'Ej: Te quemas → tu productividad baja → te despiden o renuncias → buscas trabajo presencial...',
+        hint: 'Las consecuencias de las consecuencias de las consecuencias.'
+      },
+      {
+        title: 'La perspectiva oculta',
+        question: '¿Qué conclusión NO OBVIA puedes sacar de este análisis?',
+        placeholder: 'Ej: El trabajo remoto puede ser una trampa si no pones límites estrictos. La "libertad" puede convertirse en prisión...',
+        hint: 'Esta perspectiva contraintuitiva es tu ángulo único.'
+      }
     ]
   },
   {
-    id: 'stoic',
-    emoji: '🏛️',
-    name: 'Dicotomía del Control',
-    tag: 'Recomendada',
-    authors: 'Epictetus / Marcus Aurelius',
-    users: ['Marcus Aurelius', 'Epictetus', 'Tim Ferriss'],
-    description: 'Enfócate SOLO en lo que puedes controlar.',
-    howToUse: 'Separa lo que controlas de lo que no.',
-    questions: [
-      '¿Qué de esto está bajo MI control?',
-      '¿Estoy gastando energía en cosas que no puedo cambiar?',
-      '¿Cuál es mi respuesta, independiente del resultado?',
-      '¿Qué haría un sabio estoico en mi situación?',
-      '¿Qué puedo controlar AHORA MISMO?'
-    ],
-    template: (topic: string) => [
-      `Lo que puedes y NO puedes controlar en ${topic}`,
-      `Estoicismo aplicado a ${topic}`,
-      `Deja de preocuparte por esto en ${topic}`,
-      `${topic} zen: enfócate solo en lo importante`,
-      `La serenidad de ${topic}: controlando lo controlable`
-    ]
-  },
-  {
-    id: 'scamper',
-    emoji: '🔄',
-    name: 'SCAMPER',
-    tag: 'Moderna',
-    authors: 'Bob Eberle',
-    users: ['Creativos', 'Diseñadores', 'Innovadores'],
-    description: 'Sustituir, Combinar, Adaptar, Modificar, Poner otros usos, Eliminar, Reorganizar.',
-    howToUse: 'Aplica cada verbo a tu idea.',
-    questions: [
-      '¿Qué puedo SUSTITUIR en esto?',
-      '¿Con qué puedo COMBINARLO?',
-      '¿Cómo puedo ADAPTARLO a otro contexto?',
-      '¿Qué puedo MODIFICAR o magnificar?',
-      '¿Qué otros USOS podría tener? ¿Qué puedo ELIMINAR? ¿Cómo puedo REORGANIZARLO?'
-    ],
-    template: (topic: string) => [
-      `SCAMPER tu ${topic}: 7 formas de reinventarlo`,
-      `¿Qué pasa si COMBINAS ${topic} con...?`,
-      `Adaptando ${topic} a nuevos contextos`,
-      `${topic} reorganizado: una perspectiva fresca`,
-      `Sustituciones creativas en ${topic}`
-    ]
-  },
-  {
-    id: 'six-hats',
-    emoji: '🎩',
-    name: 'Los 6 Sombreros',
-    tag: 'Moderna',
-    authors: 'Edward de Bono',
-    users: ['Equipos creativos', 'Facilitadores', 'Líderes'],
-    description: 'Analiza desde 6 perspectivas: Datos, Emociones, Crítica, Optimismo, Creatividad, Organización.',
-    howToUse: 'Ponte cada sombrero y analiza desde esa perspectiva.',
-    questions: [
-      '🤍 BLANCO: ¿Cuáles son los datos y hechos puros?',
-      '❤️ ROJO: ¿Qué siento intuitivamente sobre esto?',
-      '🖤 NEGRO: ¿Cuáles son los riesgos y problemas?',
-      '💛 AMARILLO: ¿Cuáles son los beneficios y oportunidades?',
-      '💚 VERDE: ¿Qué ideas creativas se me ocurren? 💙 AZUL: ¿Cómo organizo todo esto?'
-    ],
-    template: (topic: string) => [
-      `${topic} visto desde 6 perspectivas diferentes`,
-      `El lado emocional de ${topic} que ignoramos`,
-      `Crítica constructiva: los problemas reales de ${topic}`,
-      `El futuro optimista de ${topic}`,
-      `Pensamiento creativo: ${topic} reimaginado`
-    ]
-  },
-  {
-    id: 'five-whys',
-    emoji: '❓',
-    name: 'Los 5 Por Qués',
-    tag: 'Moderna',
-    authors: 'Sakichi Toyoda',
-    users: ['Toyota', 'Lean practitioners', 'Problem solvers'],
-    description: 'Pregunta "¿Por qué?" cinco veces consecutivas.',
-    howToUse: 'Sigue preguntando "¿Por qué?" hasta llegar a la raíz.',
-    questions: [
-      '¿Por qué quiero hacer esto?',
-      '¿Por qué es importante esa razón?',
-      '¿Por qué eso me importa?',
-      '¿Por qué eso es relevante para mí?',
-      '¿Por qué? (sigue hasta encontrar la raíz)'
-    ],
-    template: (topic: string) => [
-      `La raíz del problema con ${topic} (5 por qués)`,
-      `¿Por qué realmente te importa ${topic}?`,
-      `Excavando profundo: la verdad detrás de ${topic}`,
-      `5 niveles de ${topic}: del síntoma a la causa`,
-      `El "por qué" definitivo de ${topic}`
-    ]
-  },
-  {
-    id: 'pareto',
-    emoji: '📊',
-    name: 'Análisis Pareto',
-    tag: 'Moderna',
-    authors: 'Vilfredo Pareto',
-    users: ['Tim Ferriss', 'Joseph Juran', 'Richard Koch'],
-    description: 'La regla 80/20 aplicada a todo.',
-    howToUse: 'Encuentra el 20% que produce el 80% de resultados.',
-    questions: [
-      '¿Cuál es el 20% que produce el 80% de mis resultados?',
-      '¿Qué actividades tienen el mayor impacto?',
-      '¿Qué puedo eliminar sin perder mucho valor?',
-      '¿Dónde está el cuello de botella?',
-      '¿Qué clientes/tareas/proyectos merecen más atención?'
-    ],
-    template: (topic: string) => [
-      `El 20% de ${topic} que produce el 80% de resultados`,
-      `Pareto en ${topic}: enfócate en lo vital`,
-      `Los pocos cruciales vs los muchos triviales en ${topic}`,
-      `Hack 80/20 para dominar ${topic} rápido`,
-      `Elimina el 80% innecesario de tu ${topic}`
-    ]
-  },
-  {
-    id: 'design-thinking',
-    emoji: '🎨',
-    name: 'Design Thinking',
-    tag: 'Moderna',
-    authors: 'IDEO / Stanford d.school',
-    users: ['Tim Brown (IDEO)', 'Apple', 'Airbnb'],
-    description: 'Empatiza, Define, Idea, Prototipa, Testea.',
-    howToUse: 'Sigue los 5 pasos centrados en el usuario.',
-    questions: [
-      '¿Quién es mi usuario y qué necesita REALMENTE?',
-      '¿Cuál es el problema real que estoy resolviendo?',
-      '¿Qué soluciones locas se me ocurren? (sin juzgar)',
-      '¿Cuál es el prototipo más rápido que puedo hacer?',
-      '¿Cómo puedo testear esto con usuarios reales?'
-    ],
-    template: (topic: string) => [
-      `Design Thinking aplicado a ${topic}`,
-      `Empatizando con tu audiencia de ${topic}`,
-      `Prototipando ideas en ${topic}: falla rápido`,
-      `El usuario primero: rediseñando ${topic}`,
-      `5 pasos para innovar en ${topic}`
-    ]
-  },
-  {
-    id: 'black-swan',
-    emoji: '🦢',
-    name: 'Black Swan Thinking',
-    tag: 'Genio',
-    authors: 'Nassim Nicholas Taleb',
-    users: ['Nassim Taleb', 'Daniel Kahneman', 'Bridgewater'],
-    description: 'Prepárate para eventos impredecibles de alto impacto.',
-    howToUse: 'Considera los escenarios extremos que "nunca pasan".',
-    questions: [
-      '¿Qué evento improbable pero devastador podría pasar?',
-      '¿Estoy preparado para escenarios extremos?',
-      '¿Qué "nunca va a pasar" ya está pasando?',
-      '¿Cómo puedo beneficiarme de la incertidumbre?',
-      '¿Qué cisne negro podría cambiar todo?'
-    ],
-    template: (topic: string) => [
-      `El cisne negro de ${topic}: ¿estás preparado?`,
-      `Eventos impredecibles que cambiarán ${topic}`,
-      `Lo que no sabes de ${topic} puede destruirte`,
-      `Preparándote para lo impensable en ${topic}`,
-      `Los "nunca va a pasar" de ${topic} que ya están pasando`
+    id: 'steelman',
+    emoji: '🛡️',
+    name: 'Steel Man',
+    genius: 'Sam Harris',
+    oneLiner: 'Defiende a tu enemigo mejor que él mismo.',
+    steps: [
+      {
+        title: 'Tu posición',
+        question: '¿Cuál es una opinión FUERTE que tienes sobre algo?',
+        placeholder: 'Ej: Creo que las redes sociales son tóxicas, creo que la universidad no vale la pena...',
+        hint: 'Algo controversial donde tengas una posición clara.'
+      },
+      {
+        title: 'La posición contraria',
+        question: '¿Qué dice la gente que NO está de acuerdo contigo?',
+        placeholder: 'Ej: Las redes sociales conectan personas, dan oportunidades, democratizan la información...',
+        hint: 'No la versión estúpida. La versión INTELIGENTE del argumento contrario.'
+      },
+      {
+        title: 'Steel Man: Hazlo más fuerte',
+        question: 'Ahora MEJORA el argumento contrario. ¿Cuál es la MEJOR versión posible?',
+        placeholder: 'Ej: Las redes sociales han permitido que millones de personas marginadas encuentren comunidad y oportunidades económicas que jamás tendrían de otra forma...',
+        hint: 'Defiende la posición contraria como si fuera tuya.'
+      },
+      {
+        title: '¿En qué tienen razón?',
+        question: '¿Qué parte del argumento contrario es VÁLIDA y deberías incorporar?',
+        placeholder: 'Ej: Es verdad que las redes dan acceso a personas que de otra forma no tendrían voz...',
+        hint: 'Nadie tiene 100% la razón ni 100% está equivocado.'
+      },
+      {
+        title: 'Tu posición mejorada',
+        question: '¿Cómo cambia tu opinión original después de este ejercicio?',
+        placeholder: 'Ej: Las redes sociales son herramientas poderosas que pueden ser tóxicas O transformadoras dependiendo de cómo las uses. El problema no es la red, es...',
+        hint: 'Las mejores opiniones son las que sobreviven al acero.'
+      }
     ]
   }
 ];
 
-const niches = [
-  'Marketing Digital',
-  'Productividad',
-  'Finanzas Personales',
-  'Desarrollo Personal',
-  'Tecnología',
-  'Emprendimiento',
-  'Salud y Fitness',
-  'Educación',
-  'Creatividad',
-  'Liderazgo',
-  'Inversiones',
-  'Programación',
-  'Diseño',
-  'Redes Sociales',
-  'E-commerce',
-  'Inteligencia Artificial',
-  'Mindfulness',
-  'Carrera Profesional'
-];
+interface WorkshopAnswers {
+  [stepIndex: number]: string;
+}
 
-interface Note {
+interface SavedIdea {
   id: string;
-  title: string;
-  content: string;
   methodology: string;
+  methodologyEmoji: string;
+  answers: WorkshopAnswers;
+  outline: GeneratedOutline | null;
   createdAt: number;
+}
+
+interface GeneratedOutline {
+  hook: string;
+  title: string;
+  thesis: string;
+  sections: {title: string; points: string[]}[];
+  conclusion: string;
+  cta: string;
 }
 
 export default function Home() {
   const [selectedMethod, setSelectedMethod] = useState<typeof methodologies[0] | null>(null);
-  const [selectedNiche, setSelectedNiche] = useState('');
-  const [customNiche, setCustomNiche] = useState('');
-  const [generatedIdeas, setGeneratedIdeas] = useState<string[]>([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [answers, setAnswers] = useState<WorkshopAnswers>({});
+  const [generatedOutline, setGeneratedOutline] = useState<GeneratedOutline | null>(null);
+  const [savedIdeas, setSavedIdeas] = useState<SavedIdea[]>([]);
+  const [view, setView] = useState<'home' | 'workshop' | 'ideas'>('home');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<'ideas' | 'questions' | 'notes'>('ideas');
-  const [questionAnswers, setQuestionAnswers] = useState<{[key: number]: string}>({});
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [currentNote, setCurrentNote] = useState<Note | null>(null);
-  const [showNoteEditor, setShowNoteEditor] = useState(false);
 
-  // Cargar notas del localStorage
+  // Cargar ideas guardadas
   useEffect(() => {
-    const savedNotes = localStorage.getItem('blog-idea-genius-notes');
-    if (savedNotes) {
-      setNotes(JSON.parse(savedNotes));
+    const saved = localStorage.getItem('blog-genius-ideas-v2');
+    if (saved) {
+      setSavedIdeas(JSON.parse(saved));
     }
   }, []);
 
-  // Guardar notas en localStorage
+  // Guardar ideas
   useEffect(() => {
-    localStorage.setItem('blog-idea-genius-notes', JSON.stringify(notes));
-  }, [notes]);
+    localStorage.setItem('blog-genius-ideas-v2', JSON.stringify(savedIdeas));
+  }, [savedIdeas]);
 
-  const generateIdeas = () => {
-    if (!selectedMethod) return;
-    const topic = customNiche || selectedNiche;
-    if (!topic) return;
-
-    setIsGenerating(true);
-    setTimeout(() => {
-      const ideas = selectedMethod.template(topic);
-      setGeneratedIdeas(ideas);
-      setIsGenerating(false);
-    }, 800);
+  const startWorkshop = (method: typeof methodologies[0]) => {
+    setSelectedMethod(method);
+    setCurrentStep(0);
+    setAnswers({});
+    setGeneratedOutline(null);
+    setView('workshop');
   };
 
-  const copyIdea = (idea: string, index: number) => {
-    navigator.clipboard.writeText(idea);
-    setCopiedIndex(index);
-    setTimeout(() => setCopiedIndex(null), 2000);
-  };
-
-  const regenerate = () => {
-    if (selectedMethod && (customNiche || selectedNiche)) {
-      generateIdeas();
+  const nextStep = () => {
+    if (selectedMethod && currentStep < selectedMethod.steps.length - 1) {
+      setCurrentStep(currentStep + 1);
     }
   };
 
-  const startNewNote = (title?: string) => {
-    const newNote: Note = {
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const generateOutline = () => {
+    if (!selectedMethod) return;
+    
+    setIsGenerating(true);
+    
+    // Simular generación (en una versión real, esto sería una llamada a IA)
+    setTimeout(() => {
+      const outline = createOutlineFromAnswers(selectedMethod, answers);
+      setGeneratedOutline(outline);
+      setIsGenerating(false);
+    }, 1500);
+  };
+
+  const createOutlineFromAnswers = (method: typeof methodologies[0], ans: WorkshopAnswers): GeneratedOutline => {
+    // Lógica personalizada por metodología
+    const firstAnswer = ans[0] || 'tu tema';
+    const keyInsight = ans[3] || ans[2] || 'tu insight principal';
+    
+    let hook = '';
+    let title = '';
+    let thesis = '';
+    let sections: {title: string; points: string[]}[] = [];
+    let conclusion = '';
+    let cta = '';
+
+    switch (method.id) {
+      case 'first-principles':
+        hook = `Todo lo que te dijeron sobre ${firstAnswer} es mentira. Bueno, casi todo.`;
+        title = `${firstAnswer}: Destruyendo los mitos y reconstruyendo desde cero`;
+        thesis = ans[3] || 'La verdad que la mayoría ignora...';
+        sections = [
+          { title: 'Los mitos que todos creen', points: (ans[1] || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'Por qué son falsos', points: (ans[2] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'La verdad fundamental', points: [ans[3] || 'El principio base'] },
+          { title: 'Cómo aplicarlo desde cero', points: (ans[4] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 4) }
+        ];
+        conclusion = `La próxima vez que escuches un "así se hace" sobre ${firstAnswer}, cuestiona todo.`;
+        cta = '¿Qué otro mito sobre este tema deberíamos destruir? Déjalo en los comentarios.';
+        break;
+
+      case 'inverse':
+        hook = `¿Quieres fracasar en ${firstAnswer}? Tengo la guía perfecta para ti.`;
+        title = ans[4] || `Cómo garantizar tu fracaso en ${firstAnswer} (y qué hacer en su lugar)`;
+        thesis = 'A veces la mejor forma de ganar es saber exactamente cómo perder.';
+        sections = [
+          { title: 'La receta del desastre', points: (ans[1] || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4) },
+          { title: 'Por qué la gente sigue cayendo', points: (ans[2] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'La inversión: qué hacer en su lugar', points: (ans[3] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 4) }
+        ];
+        conclusion = 'El éxito no es hacer las cosas bien. Es dejar de hacer las cosas mal.';
+        cta = '¿Cuál de estos errores has cometido? Confiesa en los comentarios (sin juicio).';
+        break;
+
+      case 'feynman':
+        hook = `${firstAnswer} suena complicado. No lo es. Te lo explico como si tuvieras 8 años.`;
+        title = `${firstAnswer} explicado para un niño (y por qué los expertos lo complican)`;
+        thesis = 'Si no puedes explicarlo simple, no lo entiendes. Y muchos "expertos" no lo entienden.';
+        sections = [
+          { title: 'La explicación de 8 años', points: [ans[1] || 'La versión simple'] },
+          { title: 'La analogía perfecta', points: [ans[3] || 'Como cuando...'] },
+          { title: 'En 3 oraciones', points: (ans[4] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'Por qué los expertos lo complican', points: ['Jerga innecesaria', 'Ego intelectual', 'No lo entienden realmente'] }
+        ];
+        conclusion = `Ahora puedes explicar ${firstAnswer} en una cena y sonar inteligente. De nada.`;
+        cta = '¿Qué otro concepto "complicado" quieres que simplifique? Pídelo abajo.';
+        break;
+
+      case 'premortem':
+        hook = `Tu proyecto de ${firstAnswer} va a fracasar. Lo siento, pero es estadísticamente probable. A menos que...`;
+        title = `Por qué tu ${firstAnswer} va a fracasar (y el checklist para evitarlo)`;
+        thesis = 'Los ganadores no tienen más suerte. Tienen mejor prevención.';
+        sections = [
+          { title: 'Las formas más comunes de morir', points: (ans[1] || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 4) },
+          { title: 'Las señales de advertencia', points: (ans[2] || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'El plan de prevención', points: (ans[3] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 4) },
+          { title: 'El checklist anti-fracaso', points: (ans[4] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 5) }
+        ];
+        conclusion = 'El fracaso no es el enemigo. La sorpresa sí. Ahora ya no te sorprenderá.';
+        cta = '¿Qué punto de fracaso me faltó? Agrégalo en los comentarios para ayudar a otros.';
+        break;
+
+      case 'secondorder':
+        hook = `Todos hablan de ${firstAnswer}. Nadie habla de lo que viene DESPUÉS.`;
+        title = `${firstAnswer}: Las consecuencias ocultas que nadie te dice`;
+        thesis = 'El problema no es la decisión. Es no pensar 3 movimientos adelante.';
+        sections = [
+          { title: 'Lo obvio (que todos ven)', points: (ans[1] || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'El segundo orden (que pocos ven)', points: (ans[2] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'El tercer orden (que casi nadie ve)', points: (ans[3] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: 'La conclusión contraintuitiva', points: [ans[4] || 'Lo que realmente significa'] }
+        ];
+        conclusion = 'Antes de tu próxima decisión, pregunta "¿y luego qué?" tres veces. Tu yo futuro te lo agradecerá.';
+        cta = '¿Qué otra consecuencia de segundo orden ves? El debate está abierto.';
+        break;
+
+      case 'steelman':
+        hook = `Voy a defender algo con lo que no estoy de acuerdo. Y tal vez cambies de opinión.`;
+        title = `El mejor argumento a favor de ${firstAnswer} (aunque no estés de acuerdo)`;
+        thesis = 'Las opiniones fuertes vienen de entender AMBOS lados, no de ignorar uno.';
+        sections = [
+          { title: 'Mi posición original', points: [ans[0] || 'Lo que yo creo'] },
+          { title: 'El argumento contrario (versión débil)', points: (ans[1] || '').split(',').map(s => s.trim()).filter(Boolean).slice(0, 2) },
+          { title: 'El Steel Man (versión fuerte)', points: (ans[2] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 3) },
+          { title: '¿En qué tienen razón?', points: (ans[3] || '').split('.').map(s => s.trim()).filter(Boolean).slice(0, 2) },
+          { title: 'Mi posición evolucionada', points: [ans[4] || 'Lo que ahora creo'] }
+        ];
+        conclusion = 'Las mejores ideas sobreviven al acero. Si la tuya no puede, tal vez necesita evolucionar.';
+        cta = '¿Cambié tu perspectiva? ¿O tienes un contra-argumento aún más fuerte? Debatamos.';
+        break;
+
+      default:
+        hook = `Esto va a cambiar cómo piensas sobre ${firstAnswer}.`;
+        title = `Una nueva perspectiva sobre ${firstAnswer}`;
+        thesis = keyInsight;
+        sections = [{ title: 'El punto principal', points: Object.values(ans).filter(Boolean).slice(0, 4) as string[] }];
+        conclusion = 'Aplica esto hoy y ve qué pasa.';
+        cta = '¿Qué piensas? Déjalo en los comentarios.';
+    }
+
+    return { hook, title, thesis, sections, conclusion, cta };
+  };
+
+  const saveIdea = () => {
+    if (!selectedMethod || !generatedOutline) return;
+    
+    const newIdea: SavedIdea = {
       id: Date.now().toString(),
-      title: title || 'Nueva idea',
-      content: '',
-      methodology: selectedMethod?.name || '',
+      methodology: selectedMethod.name,
+      methodologyEmoji: selectedMethod.emoji,
+      answers,
+      outline: generatedOutline,
       createdAt: Date.now()
     };
-    setCurrentNote(newNote);
-    setShowNoteEditor(true);
-  };
-
-  const saveNote = () => {
-    if (!currentNote) return;
     
-    const existingIndex = notes.findIndex(n => n.id === currentNote.id);
-    if (existingIndex >= 0) {
-      const updatedNotes = [...notes];
-      updatedNotes[existingIndex] = currentNote;
-      setNotes(updatedNotes);
-    } else {
-      setNotes([...notes, currentNote]);
-    }
-    setShowNoteEditor(false);
-    setCurrentNote(null);
+    setSavedIdeas([newIdea, ...savedIdeas]);
   };
 
-  const deleteNote = (noteId: string) => {
-    setNotes(notes.filter(n => n.id !== noteId));
-    if (currentNote?.id === noteId) {
-      setShowNoteEditor(false);
-      setCurrentNote(null);
-    }
+  const deleteIdea = (id: string) => {
+    setSavedIdeas(savedIdeas.filter(idea => idea.id !== id));
   };
 
-  const editNote = (note: Note) => {
-    setCurrentNote(note);
-    setShowNoteEditor(true);
+  const exportOutline = (outline: GeneratedOutline) => {
+    const text = `# ${outline.title}
+
+## Hook
+${outline.hook}
+
+## Tesis
+${outline.thesis}
+
+${outline.sections.map(s => `## ${s.title}
+${s.points.map(p => `- ${p}`).join('\n')}`).join('\n\n')}
+
+## Conclusión
+${outline.conclusion}
+
+## Call to Action
+${outline.cta}
+`;
+    
+    navigator.clipboard.writeText(text);
+    alert('¡Outline copiado al portapapeles!');
   };
+
+  const progress = selectedMethod ? ((currentStep + 1) / selectedMethod.steps.length) * 100 : 0;
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       {/* Header */}
-      <header className="border-b border-white/10 backdrop-blur-sm bg-black/20">
-        <div className="max-w-6xl mx-auto px-4 py-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-            <span className="text-4xl">🧠</span>
-            Blog Idea Genius
-          </h1>
-          <p className="text-purple-300 mt-2">
-            Genera ideas de blog usando metodologías de genios como Elon Musk, Charlie Munger y más
-          </p>
+      <header className="border-b border-white/10 bg-black/30 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+          <button 
+            onClick={() => { setView('home'); setSelectedMethod(null); }}
+            className="text-2xl font-bold text-white flex items-center gap-2 hover:opacity-80 transition-opacity"
+          >
+            <span>🧠</span>
+            <span className="hidden sm:inline">Blog Idea Genius</span>
+            <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full ml-2">v2</span>
+          </button>
+          
+          <div className="flex gap-2">
+            <button
+              onClick={() => setView('home')}
+              className={`px-4 py-2 rounded-lg text-sm transition-all ${
+                view === 'home' ? 'bg-purple-500 text-white' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              Workshop
+            </button>
+            <button
+              onClick={() => setView('ideas')}
+              className={`px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-1 ${
+                view === 'ideas' ? 'bg-purple-500 text-white' : 'text-gray-400 hover:text-white'
+              }`}
+            >
+              Mis Ideas {savedIdeas.length > 0 && <span className="bg-white/20 px-1.5 rounded-full text-xs">{savedIdeas.length}</span>}
+            </button>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Step 1: Select Methodology */}
-        <section className="mb-10">
-          <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-            <span className="bg-purple-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span>
-            Elige una metodología de pensamiento
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {methodologies.map((method) => (
-              <button
-                key={method.id}
-                onClick={() => {
-                  setSelectedMethod(method);
-                  setQuestionAnswers({});
-                }}
-                className={`p-4 rounded-xl text-left transition-all duration-300 border ${
-                  selectedMethod?.id === method.id
-                    ? 'bg-purple-600/40 border-purple-400 shadow-lg shadow-purple-500/20'
-                    : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <span className="text-2xl">{method.emoji}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    method.tag === 'Recomendada' ? 'bg-green-500/20 text-green-300' :
-                    method.tag === 'Genio' ? 'bg-purple-500/20 text-purple-300' :
-                    'bg-blue-500/20 text-blue-300'
-                  }`}>
-                    {method.tag}
-                  </span>
-                </div>
-                <h3 className="font-semibold text-white mb-1">{method.name}</h3>
-                <p className="text-sm text-gray-400 mb-2">{method.description}</p>
-                <div className="flex flex-wrap gap-1">
-                  {method.users.slice(0, 2).map((user, i) => (
-                    <span key={i} className="text-xs bg-white/5 text-gray-300 px-2 py-0.5 rounded">
-                      {user}
-                    </span>
-                  ))}
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Step 2: Tabs for Ideas, Questions, Notes */}
-        {selectedMethod && (
-          <section className="mb-10 animate-fadeIn">
-            <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-              <span className="bg-purple-500 text-white w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span>
-              Explora la metodología
-            </h2>
-
-            {/* Method info card */}
-            <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-xl p-4 mb-6 border border-purple-500/30">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-3xl">{selectedMethod.emoji}</span>
-                <div>
-                  <h3 className="font-semibold text-white">{selectedMethod.name}</h3>
-                  <p className="text-sm text-purple-300">{selectedMethod.authors}</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-300 mb-2">
-                <strong className="text-purple-300">Cómo usarlo:</strong> {selectedMethod.howToUse}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        
+        {/* HOME VIEW */}
+        {view === 'home' && (
+          <>
+            {/* Hero */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                No generes títulos.<br/>
+                <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Construye ideas.
+                </span>
+              </h1>
+              <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+                Workshops interactivos basados en metodologías de genios. 
+                No te damos títulos genéricos — te guiamos para que PIENSES diferente.
               </p>
             </div>
 
-            {/* Tabs */}
-            <div className="flex gap-2 mb-6">
-              <button
-                onClick={() => setActiveTab('ideas')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
-                  activeTab === 'ideas'
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-white/5 text-gray-300 hover:bg-white/10'
-                }`}
-              >
-                <span>✨</span> Generar Ideas
-              </button>
-              <button
-                onClick={() => setActiveTab('questions')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
-                  activeTab === 'questions'
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-white/5 text-gray-300 hover:bg-white/10'
-                }`}
-              >
-                <span>❓</span> Preguntas de Reflexión
-              </button>
-              <button
-                onClick={() => setActiveTab('notes')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
-                  activeTab === 'notes'
-                    ? 'bg-purple-500 text-white'
-                    : 'bg-white/5 text-gray-300 hover:bg-white/10'
-                }`}
-              >
-                <span>📝</span> Mis Notas {notes.length > 0 && `(${notes.length})`}
-              </button>
+            {/* Methodology Cards */}
+            <div className="grid gap-4">
+              {methodologies.map((method) => (
+                <button
+                  key={method.id}
+                  onClick={() => startWorkshop(method)}
+                  className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-2xl p-6 text-left transition-all duration-300"
+                >
+                  <div className="flex items-start gap-4">
+                    <span className="text-4xl group-hover:scale-110 transition-transform">{method.emoji}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h3 className="text-xl font-bold text-white">{method.name}</h3>
+                        <span className="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full">
+                          {method.genius}
+                        </span>
+                      </div>
+                      <p className="text-gray-400 mb-3">{method.oneLiner}</p>
+                      <div className="flex items-center gap-2 text-sm text-purple-400">
+                        <span>{method.steps.length} pasos</span>
+                        <span>•</span>
+                        <span>~10 minutos</span>
+                        <span className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
+                          Empezar →
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
 
-            {/* Tab Content: Ideas */}
-            {activeTab === 'ideas' && (
-              <div>
-                {/* Niche selection */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {niches.map((niche) => (
-                    <button
-                      key={niche}
-                      onClick={() => {
-                        setSelectedNiche(niche);
-                        setCustomNiche('');
-                      }}
-                      className={`px-4 py-2 rounded-lg text-sm transition-all ${
-                        selectedNiche === niche && !customNiche
-                          ? 'bg-purple-500 text-white'
-                          : 'bg-white/5 text-gray-300 hover:bg-white/10'
-                      }`}
-                    >
-                      {niche}
-                    </button>
-                  ))}
+            {/* Philosophy */}
+            <div className="mt-16 text-center">
+              <h2 className="text-2xl font-bold text-white mb-6">¿Por qué es diferente?</h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+                  <span className="text-3xl mb-3 block">🎯</span>
+                  <h3 className="font-bold text-white mb-2">No es aleatorio</h3>
+                  <p className="text-gray-400 text-sm">Cada pregunta está diseñada para extraer insights específicos de TU experiencia.</p>
                 </div>
-
-                <div className="flex gap-3">
-                  <input
-                    type="text"
-                    placeholder="O escribe tu propio tema..."
-                    value={customNiche}
-                    onChange={(e) => {
-                      setCustomNiche(e.target.value);
-                      setSelectedNiche('');
-                    }}
-                    className="flex-1 bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
-                  />
-                  <button
-                    onClick={generateIdeas}
-                    disabled={!selectedNiche && !customNiche}
-                    className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
-                  >
-                    {isGenerating ? (
-                      <>
-                        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                        </svg>
-                        Generando...
-                      </>
-                    ) : (
-                      <>
-                        <span>✨</span>
-                        Generar Ideas
-                      </>
-                    )}
-                  </button>
+                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+                  <span className="text-3xl mb-3 block">🧠</span>
+                  <h3 className="font-bold text-white mb-2">Te hace pensar</h3>
+                  <p className="text-gray-400 text-sm">No te da la respuesta — te guía para que la descubras. Eso genera contenido único.</p>
                 </div>
-
-                {/* Generated Ideas */}
-                {generatedIdeas.length > 0 && (
-                  <div className="mt-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-white">Tus ideas generadas</h3>
-                      <button
-                        onClick={regenerate}
-                        className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-sm"
-                      >
-                        <span>🔄</span> Regenerar
-                      </button>
-                    </div>
-
-                    <div className="space-y-3">
-                      {generatedIdeas.map((idea, index) => (
-                        <div
-                          key={index}
-                          className="group bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl p-4 flex items-center justify-between transition-all"
-                        >
-                          <div className="flex items-center gap-3 flex-1">
-                            <span className="text-purple-400 font-mono text-sm">#{index + 1}</span>
-                            <p className="text-white">{idea}</p>
-                          </div>
-                          <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                              onClick={() => startNewNote(idea)}
-                              className="px-3 py-1 bg-green-500/20 hover:bg-green-500/30 text-green-300 rounded-lg text-sm flex items-center gap-1"
-                            >
-                              <span>📝</span> Desarrollar
-                            </button>
-                            <button
-                              onClick={() => copyIdea(idea, index)}
-                              className="px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-lg text-sm flex items-center gap-1"
-                            >
-                              {copiedIndex === index ? (
-                                <>
-                                  <span>✓</span> Copiado
-                                </>
-                              ) : (
-                                <>
-                                  <span>📋</span> Copiar
-                                </>
-                              )}
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <div className="bg-white/5 rounded-xl p-6 border border-white/10">
+                  <span className="text-3xl mb-3 block">📝</span>
+                  <h3 className="font-bold text-white mb-2">Outline completo</h3>
+                  <p className="text-gray-400 text-sm">Al final tienes título, hook, estructura y CTA. Listo para escribir.</p>
+                </div>
               </div>
-            )}
-
-            {/* Tab Content: Questions */}
-            {activeTab === 'questions' && (
-              <div className="space-y-4">
-                <p className="text-gray-400 mb-4">
-                  Responde estas preguntas para profundizar en la metodología <strong className="text-purple-300">{selectedMethod.name}</strong>:
-                </p>
-                
-                {selectedMethod.questions.map((question, index) => (
-                  <div key={index} className="bg-white/5 border border-white/10 rounded-xl p-4">
-                    <div className="flex items-start gap-3 mb-3">
-                      <span className="bg-purple-500/20 text-purple-300 w-6 h-6 rounded-full flex items-center justify-center text-sm flex-shrink-0">
-                        {index + 1}
-                      </span>
-                      <p className="text-white font-medium">{question}</p>
-                    </div>
-                    <textarea
-                      value={questionAnswers[index] || ''}
-                      onChange={(e) => setQuestionAnswers({...questionAnswers, [index]: e.target.value})}
-                      placeholder="Escribe tu reflexión aquí..."
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 min-h-[100px] resize-y"
-                    />
-                  </div>
-                ))}
-
-                <button
-                  onClick={() => {
-                    const allAnswers = Object.values(questionAnswers).filter(a => a.trim()).join('\n\n');
-                    if (allAnswers) {
-                      startNewNote(`Reflexiones: ${selectedMethod.name}`);
-                      if (currentNote) {
-                        setCurrentNote({...currentNote, content: allAnswers});
-                      }
-                    }
-                  }}
-                  className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all flex items-center justify-center gap-2"
-                >
-                  <span>💾</span> Guardar reflexiones como nota
-                </button>
-              </div>
-            )}
-
-            {/* Tab Content: Notes */}
-            {activeTab === 'notes' && (
-              <div>
-                {!showNoteEditor ? (
-                  <>
-                    <button
-                      onClick={() => startNewNote()}
-                      className="w-full mb-4 px-6 py-4 bg-white/5 border-2 border-dashed border-white/20 text-gray-400 rounded-xl hover:bg-white/10 hover:border-purple-500/50 hover:text-purple-300 transition-all flex items-center justify-center gap-2"
-                    >
-                      <span className="text-2xl">+</span> Nueva nota
-                    </button>
-
-                    {notes.length === 0 ? (
-                      <div className="text-center py-12 text-gray-500">
-                        <span className="text-4xl mb-4 block">📝</span>
-                        <p>Aún no tienes notas.</p>
-                        <p className="text-sm mt-1">¡Genera ideas y desarróllalas aquí!</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {notes.map((note) => (
-                          <div
-                            key={note.id}
-                            className="group bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all"
-                          >
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1" onClick={() => editNote(note)}>
-                                <h4 className="text-white font-medium cursor-pointer hover:text-purple-300">
-                                  {note.title}
-                                </h4>
-                                {note.methodology && (
-                                  <span className="text-xs text-purple-400 mt-1 inline-block">
-                                    {note.methodology}
-                                  </span>
-                                )}
-                                <p className="text-gray-400 text-sm mt-2 line-clamp-2">
-                                  {note.content || 'Sin contenido...'}
-                                </p>
-                                <span className="text-xs text-gray-500 mt-2 inline-block">
-                                  {new Date(note.createdAt).toLocaleDateString()}
-                                </span>
-                              </div>
-                              <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button
-                                  onClick={() => editNote(note)}
-                                  className="p-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-lg"
-                                >
-                                  ✏️
-                                </button>
-                                <button
-                                  onClick={() => deleteNote(note.id)}
-                                  className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg"
-                                >
-                                  🗑️
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  /* Note Editor */
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-white">
-                        {currentNote?.id && notes.some(n => n.id === currentNote.id) ? 'Editar nota' : 'Nueva nota'}
-                      </h3>
-                      <button
-                        onClick={() => {
-                          setShowNoteEditor(false);
-                          setCurrentNote(null);
-                        }}
-                        className="text-gray-400 hover:text-white"
-                      >
-                        ✕
-                      </button>
-                    </div>
-
-                    <input
-                      type="text"
-                      value={currentNote?.title || ''}
-                      onChange={(e) => currentNote && setCurrentNote({...currentNote, title: e.target.value})}
-                      placeholder="Título de tu idea..."
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-lg font-medium placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-4"
-                    />
-
-                    <textarea
-                      value={currentNote?.content || ''}
-                      onChange={(e) => currentNote && setCurrentNote({...currentNote, content: e.target.value})}
-                      placeholder="Desarrolla tu idea aquí... 
-
-• ¿De qué trata?
-• ¿Cuáles son los puntos principales?
-• ¿Qué ejemplos usarías?
-• ¿Cuál es la conclusión?"
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 min-h-[300px] resize-y"
-                    />
-
-                    <div className="flex gap-3 mt-4">
-                      <button
-                        onClick={saveNote}
-                        className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all flex items-center justify-center gap-2"
-                      >
-                        <span>💾</span> Guardar nota
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (currentNote) {
-                            navigator.clipboard.writeText(`# ${currentNote.title}\n\n${currentNote.content}`);
-                          }
-                        }}
-                        className="px-6 py-3 bg-white/5 border border-white/10 text-gray-300 rounded-lg hover:bg-white/10 transition-all flex items-center gap-2"
-                      >
-                        <span>📋</span> Copiar
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </section>
+            </div>
+          </>
         )}
 
-        {/* Tips section */}
-        {selectedMethod && activeTab === 'ideas' && generatedIdeas.length > 0 && (
-          <div className="mt-8 bg-gradient-to-r from-blue-600/10 to-cyan-600/10 rounded-xl p-6 border border-blue-500/20">
-            <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-              <span>💡</span> Tips para usar estas ideas
-            </h3>
-            <ul className="space-y-2 text-gray-300 text-sm">
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">→</span>
-                Usa las <strong>Preguntas de Reflexión</strong> para profundizar en la metodología
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">→</span>
-                Click en <strong>Desarrollar</strong> para convertir una idea en un borrador completo
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">→</span>
-                Tus notas se guardan automáticamente en tu navegador
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">→</span>
-                Combina varias metodologías para ideas más únicas
-              </li>
-            </ul>
-          </div>
+        {/* WORKSHOP VIEW */}
+        {view === 'workshop' && selectedMethod && (
+          <>
+            {/* Progress Bar */}
+            <div className="mb-8">
+              <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
+                <span>{selectedMethod.emoji} {selectedMethod.name}</span>
+                <span>Paso {currentStep + 1} de {selectedMethod.steps.length}</span>
+              </div>
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Current Step */}
+            {!generatedOutline ? (
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
+                <div className="mb-6">
+                  <span className="text-sm text-purple-400 font-medium">
+                    {selectedMethod.steps[currentStep].title}
+                  </span>
+                  <h2 className="text-2xl font-bold text-white mt-2">
+                    {selectedMethod.steps[currentStep].question}
+                  </h2>
+                  <p className="text-gray-500 text-sm mt-2">
+                    💡 {selectedMethod.steps[currentStep].hint}
+                  </p>
+                </div>
+
+                <textarea
+                  value={answers[currentStep] || ''}
+                  onChange={(e) => setAnswers({...answers, [currentStep]: e.target.value})}
+                  placeholder={selectedMethod.steps[currentStep].placeholder}
+                  className="w-full bg-black/30 border border-white/10 rounded-xl px-4 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-purple-500 min-h-[200px] resize-y text-lg"
+                  autoFocus
+                />
+
+                <div className="flex justify-between mt-6">
+                  <button
+                    onClick={prevStep}
+                    disabled={currentStep === 0}
+                    className="px-6 py-3 text-gray-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  >
+                    ← Anterior
+                  </button>
+
+                  {currentStep < selectedMethod.steps.length - 1 ? (
+                    <button
+                      onClick={nextStep}
+                      disabled={!answers[currentStep]?.trim()}
+                      className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-xl hover:from-purple-600 hover:to-pink-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      Siguiente →
+                    </button>
+                  ) : (
+                    <button
+                      onClick={generateOutline}
+                      disabled={!answers[currentStep]?.trim() || isGenerating}
+                      className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:from-green-600 hover:to-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                          </svg>
+                          Generando...
+                        </>
+                      ) : (
+                        <>✨ Generar Outline</>
+                      )}
+                    </button>
+                  )}
+                </div>
+
+                {/* Step indicators */}
+                <div className="flex justify-center gap-2 mt-8">
+                  {selectedMethod.steps.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentStep(idx)}
+                      className={`w-3 h-3 rounded-full transition-all ${
+                        idx === currentStep 
+                          ? 'bg-purple-500 scale-125' 
+                          : answers[idx] 
+                            ? 'bg-purple-500/50' 
+                            : 'bg-white/20'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              /* Generated Outline */
+              <div className="space-y-6">
+                <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                      <span>✅</span> Tu outline está listo
+                    </h2>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => exportOutline(generatedOutline)}
+                        className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg text-sm flex items-center gap-1 transition-all"
+                      >
+                        📋 Copiar
+                      </button>
+                      <button
+                        onClick={saveIdea}
+                        className="px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-sm flex items-center gap-1 transition-all"
+                      >
+                        💾 Guardar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <span className="text-xs text-purple-400 font-medium">TÍTULO</span>
+                  <h3 className="text-2xl font-bold text-white mt-1">{generatedOutline.title}</h3>
+                </div>
+
+                {/* Hook */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <span className="text-xs text-purple-400 font-medium">HOOK (primera línea)</span>
+                  <p className="text-lg text-gray-300 mt-1 italic">"{generatedOutline.hook}"</p>
+                </div>
+
+                {/* Thesis */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <span className="text-xs text-purple-400 font-medium">TESIS PRINCIPAL</span>
+                  <p className="text-lg text-white mt-1">{generatedOutline.thesis}</p>
+                </div>
+
+                {/* Sections */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <span className="text-xs text-purple-400 font-medium">ESTRUCTURA</span>
+                  <div className="mt-4 space-y-4">
+                    {generatedOutline.sections.map((section, idx) => (
+                      <div key={idx} className="border-l-2 border-purple-500/50 pl-4">
+                        <h4 className="font-semibold text-white">{idx + 1}. {section.title}</h4>
+                        <ul className="mt-2 space-y-1">
+                          {section.points.filter(Boolean).map((point, pidx) => (
+                            <li key={pidx} className="text-gray-400 text-sm flex items-start gap-2">
+                              <span className="text-purple-400">→</span>
+                              {point}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Conclusion */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                  <span className="text-xs text-purple-400 font-medium">CONCLUSIÓN</span>
+                  <p className="text-lg text-gray-300 mt-1">{generatedOutline.conclusion}</p>
+                </div>
+
+                {/* CTA */}
+                <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-6">
+                  <span className="text-xs text-purple-400 font-medium">CALL TO ACTION</span>
+                  <p className="text-lg text-white mt-1">{generatedOutline.cta}</p>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4">
+                  <button
+                    onClick={() => {
+                      setGeneratedOutline(null);
+                      setCurrentStep(0);
+                    }}
+                    className="flex-1 px-6 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl transition-all"
+                  >
+                    🔄 Empezar de nuevo
+                  </button>
+                  <button
+                    onClick={() => setView('home')}
+                    className="flex-1 px-6 py-4 bg-purple-500 hover:bg-purple-600 text-white rounded-xl transition-all"
+                  >
+                    🧠 Probar otra metodología
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* IDEAS VIEW */}
+        {view === 'ideas' && (
+          <>
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-white mb-2">Mis Ideas Guardadas</h1>
+              <p className="text-gray-400">Tus outlines generados, listos para convertir en contenido.</p>
+            </div>
+
+            {savedIdeas.length === 0 ? (
+              <div className="text-center py-16">
+                <span className="text-6xl mb-4 block">📭</span>
+                <h3 className="text-xl font-bold text-white mb-2">No tienes ideas guardadas</h3>
+                <p className="text-gray-400 mb-6">Completa un workshop y guarda tu outline.</p>
+                <button
+                  onClick={() => setView('home')}
+                  className="px-6 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-xl transition-all"
+                >
+                  Empezar un workshop
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {savedIdeas.map((idea) => (
+                  <div key={idea.id} className="bg-white/5 border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <span className="text-sm text-purple-400">{idea.methodologyEmoji} {idea.methodology}</span>
+                        <h3 className="text-lg font-bold text-white mt-1">{idea.outline?.title}</h3>
+                        <p className="text-gray-500 text-sm mt-1">
+                          {new Date(idea.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => idea.outline && exportOutline(idea.outline)}
+                          className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all"
+                          title="Copiar"
+                        >
+                          📋
+                        </button>
+                        <button
+                          onClick={() => deleteIdea(idea.id)}
+                          className="p-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg transition-all"
+                          title="Eliminar"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {idea.outline && (
+                      <div className="bg-black/20 rounded-lg p-4 mt-4">
+                        <p className="text-gray-400 text-sm italic">"{idea.outline.hook}"</p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {idea.outline.sections.map((s, idx) => (
+                            <span key={idx} className="text-xs bg-purple-500/20 text-purple-300 px-2 py-1 rounded">
+                              {s.title}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
       {/* Footer */}
       <footer className="border-t border-white/10 mt-16">
-        <div className="max-w-6xl mx-auto px-4 py-6 text-center text-gray-500 text-sm">
-          <p>Hecho con 🧠 usando metodologías de los más grandes pensadores</p>
+        <div className="max-w-4xl mx-auto px-4 py-6 text-center text-gray-500 text-sm">
+          <p>Piensa como un genio. Escribe como tú.</p>
           <p className="mt-1">VibeCoding Bootcamp • Frutero Club 🍓</p>
         </div>
       </footer>
